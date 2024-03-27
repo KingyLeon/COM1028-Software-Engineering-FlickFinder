@@ -1,9 +1,12 @@
 package com.flickfinder.controller;
 
 import java.sql.SQLException;
+import java.util.List;
 
 import com.flickfinder.dao.MovieDAO;
+import com.flickfinder.dao.PersonDAO;
 import com.flickfinder.model.Movie;
+import com.flickfinder.model.Person;
 
 import io.javalin.http.Context;
 
@@ -16,9 +19,8 @@ import io.javalin.http.Context;
  * handling a specific HTTP request.
  * 
  * Methods a Javalin Context object as a parameter and uses it to send a
- * response back to the client.
- * We also handle business logic in the controller, such as validating input and
- * handling errors.
+ * response back to the client. We also handle business logic in the controller,
+ * such as validating input and handling errors.
  *
  * Notice that the methods don't return anything. Instead, they use the Javalin
  * Context object to send a response back to the client.
@@ -77,4 +79,39 @@ public class MovieController {
 		}
 	}
 
+	public void getPeopleByMovieId(Context ctx) {
+		int id = Integer.parseInt(ctx.pathParam("id"));
+		MovieDAO movie = new MovieDAO();
+		try {
+			ctx.json(movie.getStarsByMovie(id));
+		} catch (SQLException e) {
+			ctx.status(500);
+			ctx.result("Database error");
+			e.printStackTrace();
+		}
+	}
+
+	public void getNumMovies(Context ctx) {
+		if (ctx.queryParam("limit") != null) {
+			int limitParam = Integer.parseInt(ctx.queryParam("limit"));
+			if (limitParam > 0) {
+				MovieDAO movieDAO = new MovieDAO();
+				try {
+					ctx.json(movieDAO.getNumMovies(limitParam));
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		} else {
+			getAllMovies(ctx);
+		}
+	}
+	/*
+	 * public void getRatingsByYear(Context ctx) { int year =
+	 * Integer.parseInt(ctx.pathParam("year")); try {
+	 * 
+	 * } catch(SQLException e) { ctx.status(500); ctx.result("Database error");
+	 * e.printStackTrace(); } }
+	 */
 }

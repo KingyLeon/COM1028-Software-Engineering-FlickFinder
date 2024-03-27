@@ -11,6 +11,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import com.flickfinder.model.Movie;
+import com.flickfinder.model.Person;
 import com.flickfinder.util.Database;
 import com.flickfinder.util.Seeder;
 
@@ -88,7 +89,6 @@ class MovieDAOTest {
 	@Test
 	void testGetMovieByIdInvalidId() {
 		// write an assertThrows for a SQLException
-
 		try {
 			Movie movie = movieDAO.getMovieById(1000);
 			assertEquals(null, movie);
@@ -97,6 +97,29 @@ class MovieDAOTest {
 			e.printStackTrace();
 		}
 
+	}
+	
+	@Test
+	void testGetStarsByMovie() {
+		List<Person> people;
+		try {
+			people = movieDAO.getStarsByMovie(1);
+			assertEquals("Tim Robbins", people.get(0).getName());
+			assertEquals("Morgan Freeman", people.get(1).getName());
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	@Test
+	void testGetNumOfMovies() {
+		try {
+			List<Movie> movies = movieDAO.getNumMovies(3);
+			assertEquals(3, movies.size());
+		} catch(SQLException e) {
+			e.printStackTrace();
+		}
 	}
 
 	@AfterEach

@@ -1,7 +1,9 @@
 package com.flickfinder;
 
 import com.flickfinder.controller.MovieController;
+import com.flickfinder.controller.PersonController;
 import com.flickfinder.dao.MovieDAO;
+import com.flickfinder.dao.PersonDAO;
 
 import io.javalin.Javalin;
 import io.javalin.http.staticfiles.Location;
@@ -33,11 +35,9 @@ public class AppConfig {
 		// Set up controllers
 		MovieDAO movieDao = new MovieDAO();
 		MovieController movieController = new MovieController(movieDao);
-
 		// Uncomment the following lines as you progress through the assessment.
-		// PersonController personController = new PersonController();
-		// PersonDAO personDao = new PersonDAO();
-		// PersonController personController = new PersonController(personDao);
+		 PersonDAO personDao = new PersonDAO();
+		 PersonController personController = new PersonController(personDao);
 
 		/**
 		 * Below are the routes for the application.
@@ -48,14 +48,20 @@ public class AppConfig {
 		 * pattern matched in the order they are defined.
 		 * Only uncomment the routes for the functionality you have implemented.
 		 */
-		// app.get("/movies/ratings/{year}", movieController::getRatingsByYear);
-		app.get("/movies", movieController::getAllMovies);
+		 
+		//app.get("/movies/ratings/{year}", movieController::getRatingsByYear);
+		 
+		// PLEASE NOTE, getAllMovies IS IMPLEMENTED
+		//app.get("/movies", movieController::getAllMovies);
+		app.get("/movies", movieController::getNumMovies); // limit param implemented
 		app.get("/movies/{id}", movieController::getMovieById);
-		// app.get("/movies/{id}/stars", movieController::getPeopleByMovieId);
+		app.get("/movies/{id}/stars", movieController::getPeopleByMovieId);
 
-		// app.get("/people", personController::getAllPeople);
-		// app.get("/people/{id}", personController::getPersonById);
-		// app.get("/people/{id}/movies", personController::getMoviesStarringPerson);
+		 //PLEASE NOTE, getAllPeople IS IMPLEMENTED
+		 //app.get("/people", personController::getAllPeople);
+		 app.get("/people", personController::getNumPeople);
+		 app.get("/people/{id}", personController::getPersonById);
+		 app.get("/people/{id}/movies", personController::getMoviesStarringPerson);
 
 		return app;
 

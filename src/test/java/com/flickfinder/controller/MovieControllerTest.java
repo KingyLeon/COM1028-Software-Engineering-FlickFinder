@@ -48,8 +48,8 @@ class MovieControllerTest {
 	}
 
 	/**
-	 * Tests the getAllMovies method.
-	 * We expect to get a list of all movies in the database.
+	 * Tests the getAllMovies method. We expect to get a list of all movies in the
+	 * database.
 	 */
 
 	@Test
@@ -92,6 +92,22 @@ class MovieControllerTest {
 	}
 
 	/**
+	 * Tests the getPeopleByMovieId method.
+	 * We expect to get a list of all people related to the MovieId in the database.
+	 */
+	@Test
+	void testGetPeopleByMovieId() {
+		when(ctx.pathParam("id")).thenReturn("1");
+		movieController.getPeopleByMovieId(ctx);
+		try {
+			verify(movieDAO).getStarsByMovie(1);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * 
 	 * Test a 500 status code is returned when a database error occurs.
 	 * 
 	 * @throws SQLException
