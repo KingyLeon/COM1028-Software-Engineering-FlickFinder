@@ -106,6 +106,7 @@ class IntegrationTests {
 		.body("name", hasItems("Tim Robbins", "Morgan Freeman"))
 		.body("birth", hasItems(1958, 1937));
 	}
+	// Test for movies by specific people id
 	@Test
 	void retrieves_movies_of_a_star() {
 		given().when().get(baseURL + "/people/4/movies").then().assertThat().statusCode(200). // Assuming a successful

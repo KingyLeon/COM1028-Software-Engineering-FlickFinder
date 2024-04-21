@@ -46,6 +46,7 @@ public class MovieController {
 	 * 
 	 * @param ctx the Javalin context
 	 */
+
 	public void getAllMovies(Context ctx) {
 		try {
 			ctx.json(movieDAO.getAllMovies());
@@ -56,41 +57,7 @@ public class MovieController {
 		}
 	}
 
-	/**
-	 * Returns the movie with the specified id.
-	 * 
-	 * @param ctx the Javalin context
-	 */
-	public void getMovieById(Context ctx) {
-
-		int id = Integer.parseInt(ctx.pathParam("id"));
-		try {
-			Movie movie = movieDAO.getMovieById(id);
-			if (movie == null) {
-				ctx.status(404);
-				ctx.result("Movie not found");
-				return;
-			}
-			ctx.json(movieDAO.getMovieById(id));
-		} catch (SQLException e) {
-			ctx.status(500);
-			ctx.result("Database error");
-			e.printStackTrace();
-		}
-	}
-
-	public void getPeopleByMovieId(Context ctx) {
-		int id = Integer.parseInt(ctx.pathParam("id"));
-		MovieDAO movie = new MovieDAO();
-		try {
-			ctx.json(movie.getStarsByMovie(id));
-		} catch (SQLException e) {
-			ctx.status(500);
-			ctx.result("Database error");
-			e.printStackTrace();
-		}
-	}
-
+	// LIMIT implementation
 	public void getNumMovies(Context ctx) {
 		if (ctx.queryParam("limit") != null) {
 			int limitParam = Integer.parseInt(ctx.queryParam("limit"));
@@ -107,6 +74,42 @@ public class MovieController {
 			getAllMovies(ctx);
 		}
 	}
+
+	/**
+	 * Returns the movie with the specified id.
+	 * @param ctx the Javalin context
+	 */
+	public void getMovieById(Context ctx) {
+		int id = Integer.parseInt(ctx.pathParam("id"));
+		try {
+			Movie movie = movieDAO.getMovieById(id);
+			if (movie == null) {
+				ctx.status(404);
+				ctx.result("Movie not found");
+				return;
+			}
+			ctx.json(movieDAO.getMovieById(id));
+		} catch (SQLException e) {
+			ctx.status(500);
+			ctx.result("Database error");
+			e.printStackTrace();
+		}
+	}
+	/*
+	 * Returns people by specified movie id
+	 */
+	public void getPeopleByMovieId(Context ctx) {
+		int id = Integer.parseInt(ctx.pathParam("id"));
+		MovieDAO movie = new MovieDAO();
+		try {
+			ctx.json(movie.getStarsByMovie(id));
+		} catch (SQLException e) {
+			ctx.status(500);
+			ctx.result("Database error");
+			e.printStackTrace();
+		}
+	}
+	
 	/*
 	 * public void getRatingsByYear(Context ctx) { int year =
 	 * Integer.parseInt(ctx.pathParam("year")); try {

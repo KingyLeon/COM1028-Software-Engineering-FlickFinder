@@ -51,9 +51,7 @@ public class AppConfig {
 		 
 		//app.get("/movies/ratings/{year}", movieController::getRatingsByYear);
 		 
-		// PLEASE NOTE, getAllMovies IS IMPLEMENTED
-		//app.get("/movies", movieController::getAllMovies);
-		app.get("/movies", movieController::getNumMovies); // limit param implemented
+		app.get("/movies", movieController::getAllMovies); // limit param implemented
 		app.get("/movies/{id}", movieController::getMovieById);
 		app.get("/movies/{id}/stars", movieController::getPeopleByMovieId);
 

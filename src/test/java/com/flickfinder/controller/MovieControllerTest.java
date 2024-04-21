@@ -20,7 +20,6 @@ import io.javalin.http.Context;
 class MovieControllerTest {
 
 	/**
-	 *
 	 * The context object, later we will mock it.
 	 */
 	private Context ctx;
@@ -62,10 +61,9 @@ class MovieControllerTest {
 		}
 	}
 
-	/**
+	/*
 	 * Test that the controller returns a 500 status code when a database error
 	 * occurs
-	 * 
 	 * @throws SQLException
 	 */
 	@Test
@@ -95,6 +93,7 @@ class MovieControllerTest {
 	 * Tests the getPeopleByMovieId method.
 	 * We expect to get a list of all people related to the MovieId in the database.
 	 */
+	
 	@Test
 	void testGetPeopleByMovieId() {
 		when(ctx.pathParam("id")).thenReturn("1");
@@ -107,9 +106,7 @@ class MovieControllerTest {
 	}
 
 	/**
-	 * 
 	 * Test a 500 status code is returned when a database error occurs.
-	 * 
 	 * @throws SQLException
 	 */
 
@@ -125,7 +122,6 @@ class MovieControllerTest {
 	 * Test that the controller returns a 404 status code when a movie is not found
 	 * or
 	 * database error.
-	 * 
 	 * @throws SQLException
 	 */
 
