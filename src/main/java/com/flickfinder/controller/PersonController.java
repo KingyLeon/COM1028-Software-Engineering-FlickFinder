@@ -17,35 +17,23 @@ public class PersonController {
 		this.personDao = personDao;
 	}
 
-	// to complete the must-have requirements you need to add the following methods:
-	// getAllPeople
+	// M.1 C.1 Retrieve a list of people and limit this list
 	public void getAllPeople(Context ctx) {
+		int limitParam;
+		PersonDAO personDAO = new PersonDAO();
+		if (ctx.queryParam("limit") != null) {
+			limitParam = Integer.parseInt(ctx.queryParam("limit"));
+		} else {
+			limitParam = 50;
+		}
 		try {
-			ctx.json(personDao.getAllPeople());
+			ctx.json(personDAO.getAllPeople(limitParam));
 		} catch (SQLException e) {
-			ctx.status(500);
-			ctx.result("Database error");
 			e.printStackTrace();
 		}
 	}
 
-	public void getNumPeople(Context ctx) {
-		if (ctx.queryParam("limit") != null) {
-			int limitParam = Integer.parseInt(ctx.queryParam("limit"));
-			if (limitParam > 0) {
-				PersonDAO personDAO = new PersonDAO();
-				try {
-					ctx.json(personDAO.getNumPeople(limitParam));
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
-			}
-		} else {
-			getAllPeople(ctx);
-		}
-	}
-
-	// getPersonById
+	// M.4 Retrieve a person via their ID
 	public void getPersonById(Context ctx) {
 		int id = Integer.parseInt(ctx.pathParam("id"));
 		try {
@@ -63,6 +51,7 @@ public class PersonController {
 		}
 	}
 
+	// S.2 Retrieve a list of movies by a specific star
 	public void getMoviesStarringPerson(Context ctx) {
 		int id = Integer.parseInt(ctx.pathParam("id"));
 		PersonDAO PersonDAO = new PersonDAO();
@@ -74,8 +63,4 @@ public class PersonController {
 			e.printStackTrace();
 		}
 	}
-	// you will add further methods for the more advanced tasks; however, ensure
-	// your have completed
-	// the must have requirements before you start these.
-
 }

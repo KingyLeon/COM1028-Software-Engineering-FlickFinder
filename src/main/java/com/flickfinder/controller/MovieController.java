@@ -6,6 +6,7 @@ import java.util.List;
 import com.flickfinder.dao.MovieDAO;
 import com.flickfinder.dao.PersonDAO;
 import com.flickfinder.model.Movie;
+import com.flickfinder.model.MovieRating;
 import com.flickfinder.model.Person;
 
 import io.javalin.http.Context;
@@ -37,6 +38,7 @@ public class MovieController {
 	/**
 	 * Constructs a MovieController object and initializes the movieDAO.
 	 */
+
 	public MovieController(MovieDAO movieDAO) {
 		this.movieDAO = movieDAO;
 	}
@@ -48,35 +50,23 @@ public class MovieController {
 	 */
 
 	public void getAllMovies(Context ctx) {
-		try {
-			ctx.json(movieDAO.getAllMovies());
-		} catch (SQLException e) {
-			ctx.status(500);
-			ctx.result("Database error");
-			e.printStackTrace();
-		}
-	}
-
-	// LIMIT implementation
-	public void getNumMovies(Context ctx) {
+		int limitParam;
+		MovieDAO movieDAO = new MovieDAO();
 		if (ctx.queryParam("limit") != null) {
-			int limitParam = Integer.parseInt(ctx.queryParam("limit"));
-			if (limitParam > 0) {
-				MovieDAO movieDAO = new MovieDAO();
-				try {
-					ctx.json(movieDAO.getNumMovies(limitParam));
-				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
+			limitParam = Integer.parseInt(ctx.queryParam("limit"));
 		} else {
-			getAllMovies(ctx);
+			limitParam = 50;
+		}
+		try {
+			ctx.json(movieDAO.getAllMovies(limitParam));
+		} catch (SQLException e) {
+			e.printStackTrace();
 		}
 	}
 
 	/**
 	 * Returns the movie with the specified id.
+	 * 
 	 * @param ctx the Javalin context
 	 */
 	public void getMovieById(Context ctx) {
@@ -95,6 +85,7 @@ public class MovieController {
 			e.printStackTrace();
 		}
 	}
+
 	/*
 	 * Returns people by specified movie id
 	 */
@@ -109,12 +100,24 @@ public class MovieController {
 			e.printStackTrace();
 		}
 	}
-	
-	/*
-	 * public void getRatingsByYear(Context ctx) { int year =
-	 * Integer.parseInt(ctx.pathParam("year")); try {
-	 * 
-	 * } catch(SQLException e) { ctx.status(500); ctx.result("Database error");
-	 * e.printStackTrace(); } }
-	 */
+
+	public void getRatingsByYear(Context ctx) throws SQLException {
+		int yearParam = 0;
+		int limitParam = 0;
+		int voteParam = 0;
+		try {
+			yearParam = Integer.parseInt(ctx.pathParam("year"));
+			limitParam = Integer.parseInt(ctx.queryParam("limit"));
+		} catch (NumberFormatException e) {
+			limitParam = 50;
+		}
+		try {
+			voteParam = Integer.parseInt(ctx.queryParam("votes"));
+		} catch (NumberFormatException e) {
+			voteParam = 1000;
+		}
+		MovieDAO movieDAO = new MovieDAO();
+
+		ctx.json(movieDAO.getMovieRatingsByYear(yearParam, limitParam, voteParam));
+	}
 }
