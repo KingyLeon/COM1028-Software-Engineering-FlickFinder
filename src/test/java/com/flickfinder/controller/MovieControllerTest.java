@@ -55,7 +55,7 @@ class MovieControllerTest {
 	void testGetAllMovies() {
 		movieController.getAllMovies(ctx);
 		try {
-			verify(movieDAO).getAllMovies();
+			verify(movieDAO).getAllMovies(50);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -64,13 +64,15 @@ class MovieControllerTest {
 	/*
 	 * Test that the controller returns a 500 status code when a database error
 	 * occurs
+	 * 
 	 * @throws SQLException
 	 */
 	@Test
 	void testThrows500ExceptionWhenGetAllDatabaseError() throws SQLException {
-		when(movieDAO.getAllMovies()).thenThrow(new SQLException());
+		when(movieDAO.getAllMovies(50)).thenThrow(new SQLException());
 		movieController.getAllMovies(ctx);
 		verify(ctx).status(500);
+
 	}
 
 	/**
@@ -100,6 +102,36 @@ class MovieControllerTest {
 		movieController.getPeopleByMovieId(ctx);
 		try {
 			verify(movieDAO).getStarsByMovie(1);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	/*
+	 * Tests the getRatingsByYear method. 
+	 * We expect an ordered list returned of movies from a certain year above a certain number of votes
+	 */
+	@Test
+	void testGetRatingsByYear() {
+		when(ctx.pathParam("year")).thenReturn("2000");
+		when(ctx.queryParam("limit")).thenReturn("2");
+		when(ctx.queryParam("votes")).thenReturn("100");
+		try {
+			movieController.getRatingsByYear(ctx);
+			verify(movieDAO).getMovieRatingsByYear(2000, 2, 100);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	// Tests default vote and limit value
+	// We expect an ordered list returned of 50 movies from a certain year above a 1000 votes
+
+	@Test
+	void testNoVoteNoLimitParamGetRatingsByYear() {
+		when(ctx.pathParam("year")).thenReturn("2000");
+		try {
+			movieController.getRatingsByYear(ctx);
+			verify(movieDAO).getMovieRatingsByYear(2000, 50, 1000);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

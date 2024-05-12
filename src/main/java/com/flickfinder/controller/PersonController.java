@@ -20,16 +20,16 @@ public class PersonController {
 	// M.1 C.1 Retrieve a list of people and limit this list
 	public void getAllPeople(Context ctx) {
 		int limitParam;
-		PersonDAO personDAO = new PersonDAO();
 		if (ctx.queryParam("limit") != null) {
 			limitParam = Integer.parseInt(ctx.queryParam("limit"));
 		} else {
 			limitParam = 50;
 		}
 		try {
-			ctx.json(personDAO.getAllPeople(limitParam));
+			ctx.json(personDao.getAllPeople(limitParam));
 		} catch (SQLException e) {
-			e.printStackTrace();
+			ctx.status(500);
+			ctx.result("Database error");
 		}
 	}
 
@@ -47,20 +47,17 @@ public class PersonController {
 		} catch (SQLException e) {
 			ctx.status(500);
 			ctx.result("Database error");
-			e.printStackTrace();
 		}
 	}
 
 	// S.2 Retrieve a list of movies by a specific star
 	public void getMoviesStarringPerson(Context ctx) {
-		int id = Integer.parseInt(ctx.pathParam("id"));
-		PersonDAO PersonDAO = new PersonDAO();
 		try {
-			ctx.json(PersonDAO.getMoviesByStar(id));
+			int id = Integer.parseInt(ctx.pathParam("id"));
+			ctx.json(personDao.getMoviesByStar(id));
 		} catch (SQLException e) {
 			ctx.status(500);
 			ctx.result("Database error");
-			e.printStackTrace();
-		}
+		} 
 	}
 }

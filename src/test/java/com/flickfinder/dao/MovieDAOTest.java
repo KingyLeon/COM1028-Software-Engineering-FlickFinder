@@ -16,8 +16,8 @@ import com.flickfinder.util.Database;
 import com.flickfinder.util.Seeder;
 
 /**
- * Test for the Movie Data Access Object.
- * This uses an in-memory database for testing purposes.
+ * Test for the Movie Data Access Object. This uses an in-memory database for
+ * testing purposes.
  */
 
 class MovieDAOTest {
@@ -35,11 +35,10 @@ class MovieDAOTest {
 	Seeder seeder;
 
 	/**
-	 * Sets up the database connection and creates the tables.
-	 * We are using an in-memory database for testing purposes.
-	 * This gets passed to the Database class to get a connection to the database.
-	 * As it's a singleton class, the entire application will use the same
-	 * connection.
+	 * Sets up the database connection and creates the tables. We are using an
+	 * in-memory database for testing purposes. This gets passed to the Database
+	 * class to get a connection to the database. As it's a singleton class, the
+	 * entire application will use the same connection.
 	 */
 	@BeforeEach
 	void setUp() {
@@ -51,10 +50,9 @@ class MovieDAOTest {
 	}
 
 	/**
-	 * Tests the getAllMovies method.
-	 * We expect to get a list of all movies in the database.
-	 * We have seeded the database with 5 movies, so we expect to get 5 movies back.
-	 * At this point, we avoid checking the actual content of the list.
+	 * Tests the getAllMovies method. We expect to get a list of all movies in the
+	 * database. We have seeded the database with 5 movies, so we expect to get 5
+	 * movies back. At this point, we avoid checking the actual content of the list.
 	 */
 	@Test
 	void testGetAllMovies() {
@@ -66,10 +64,19 @@ class MovieDAOTest {
 			e.printStackTrace();
 		}
 	}
+	
+	void testGetAllMoviesLimit() {
+		try {
+			List<Movie> movies = movieDAO.getAllMovies(3);
+			assertEquals(3, movies.size());
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
 
 	/**
-	 * Tests the getMovieById method.
-	 * We expect to get the movie with the specified id.
+	 * Tests the getMovieById method. We expect to get the movie with the specified
+	 * id.
 	 */
 	@Test
 	void testGetMovieById() {
@@ -98,7 +105,7 @@ class MovieDAOTest {
 		}
 
 	}
-	
+
 	@Test
 	void testGetStarsByMovie() {
 		List<Person> people;
@@ -108,16 +115,6 @@ class MovieDAOTest {
 			assertEquals("Morgan Freeman", people.get(1).getName());
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-	
-	@Test
-	void testGetNumOfMovies() {
-		try {
-			List<Movie> movies = movieDAO.getNumMovies(3);
-			assertEquals(3, movies.size());
-		} catch(SQLException e) {
 			e.printStackTrace();
 		}
 	}

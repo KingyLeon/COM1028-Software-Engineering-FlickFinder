@@ -51,16 +51,16 @@ public class MovieController {
 
 	public void getAllMovies(Context ctx) {
 		int limitParam;
-		MovieDAO movieDAO = new MovieDAO();
 		if (ctx.queryParam("limit") != null) {
 			limitParam = Integer.parseInt(ctx.queryParam("limit"));
 		} else {
 			limitParam = 50;
 		}
 		try {
-			ctx.json(movieDAO.getAllMovies(limitParam));
+			ctx.json(this.movieDAO.getAllMovies(limitParam));
 		} catch (SQLException e) {
-			e.printStackTrace();
+			ctx.status(500);
+			ctx.result("Database error");
 		}
 	}
 
@@ -82,7 +82,6 @@ public class MovieController {
 		} catch (SQLException e) {
 			ctx.status(500);
 			ctx.result("Database error");
-			e.printStackTrace();
 		}
 	}
 
@@ -91,9 +90,8 @@ public class MovieController {
 	 */
 	public void getPeopleByMovieId(Context ctx) {
 		int id = Integer.parseInt(ctx.pathParam("id"));
-		MovieDAO movie = new MovieDAO();
 		try {
-			ctx.json(movie.getStarsByMovie(id));
+			ctx.json(movieDAO.getStarsByMovie(id));
 		} catch (SQLException e) {
 			ctx.status(500);
 			ctx.result("Database error");
@@ -116,8 +114,7 @@ public class MovieController {
 		} catch (NumberFormatException e) {
 			voteParam = 1000;
 		}
-		MovieDAO movieDAO = new MovieDAO();
 
-		ctx.json(movieDAO.getMovieRatingsByYear(yearParam, limitParam, voteParam));
+		ctx.json(this.movieDAO.getMovieRatingsByYear(yearParam, limitParam, voteParam));
 	}
 }

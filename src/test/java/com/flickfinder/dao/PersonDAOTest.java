@@ -63,6 +63,16 @@ class PersonDAOTest {
 			e.printStackTrace();
 		}
 	}
+	
+	@Test
+	void testGetAllPeopleLimit() {
+		try {
+			List<Person> people = personDAO.getAllPeople(2);
+			assertEquals(2, people.size());
+		} catch(SQLException e) {
+			e.printStackTrace();
+		}
+	}
 
 	/**
 	 * Tests the getPersonById method.
@@ -106,16 +116,6 @@ class PersonDAOTest {
 			assertEquals("[Movie [id=2, title=The Godfather, year=1972], Movie [id=3, title=The Godfather: Part II, year=1974]]", movies.toString());
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-	
-	@Test
-	void testGetNumOfPeople() {
-		try {
-			List<Person> people = personDAO.getNumPeople(2);
-			assertEquals(2, people.size());
-		} catch(SQLException e) {
 			e.printStackTrace();
 		}
 	}

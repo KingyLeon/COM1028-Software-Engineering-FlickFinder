@@ -54,7 +54,7 @@ class PersonControllerTest {
 	void testGetAllpersons() {
 		personController.getAllPeople(ctx);
 		try {
-			verify(personDAO).getAllPeople();
+			verify(personDAO).getAllPeople(50);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -74,5 +74,56 @@ class PersonControllerTest {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	@Test void testGetMoviesStarringPerson() {
+		when(ctx.pathParam("id")).thenReturn("12");
+		personController.getPersonById(ctx);
+		try {
+			verify(personDAO).getPersonById(12);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	/*
+	 * Test that the controller returns a 500 status code when a database error
+	 * occurs
+	 * 
+	 * @throws SQLException
+	 */
+	@Test
+	void testThrows500ExceptionWhenGetAllDatabaseError() throws SQLException {
+		when(personDAO.getAllPeople(50)).thenThrow(new SQLException());
+		personController.getAllPeople(ctx);
+		verify(ctx).status(500);
+
+	}
+	
+	/*
+	 * Test that the controller returns a 500 status code when a database error
+	 * occurs for getPersonById()
+	 * 
+	 * @throws SQLException
+	 */
+	@Test
+	void testThrows500ExceptionWhenGetByIdDatabaseError() throws SQLException {
+		when(ctx.pathParam("id")).thenReturn("1");
+		when(personDAO.getPersonById(1)).thenThrow(new SQLException());
+		personController.getPersonById(ctx);
+		verify(ctx).status(500);
+	}
+	/*
+	 * Test that the controller returns a 500 status code when a database error
+	 * occurs
+	 * 
+	 * @throws SQLException
+	 */
+	@Test
+	void testThrows500ExceptionWhenGetMoviesStartingPersonDatabaseError() throws SQLException {
+		when(ctx.pathParam("id")).thenReturn("1");
+		when(personDAO.getMoviesByStar(1)).thenThrow(new SQLException());
+		personController.getMoviesStarringPerson(ctx);
+		verify(ctx).status(500);
 	}
 }
