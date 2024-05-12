@@ -1,5 +1,6 @@
 package com.flickfinder.controller;
 
+import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -56,7 +57,7 @@ class PersonControllerTest {
 		try {
 			verify(personDAO).getAllPeople(50);
 		} catch (SQLException e) {
-			e.printStackTrace();
+			fail("SQLException occured");
 		}
 	}
 
@@ -72,7 +73,7 @@ class PersonControllerTest {
 		try {
 			verify(personDAO).getPersonById(1);
 		} catch (SQLException e) {
-			e.printStackTrace();
+			fail("SQLException occured");
 		}
 	}
 	
@@ -82,7 +83,7 @@ class PersonControllerTest {
 		try {
 			verify(personDAO).getPersonById(12);
 		} catch (SQLException e) {
-			e.printStackTrace();
+			fail("SQLException occured");
 		}
 	}
 	

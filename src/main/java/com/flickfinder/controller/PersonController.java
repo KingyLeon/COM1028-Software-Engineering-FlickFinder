@@ -19,13 +19,13 @@ public class PersonController {
 
 	// M.1 C.1 Retrieve a list of people and limit this list
 	public void getAllPeople(Context ctx) {
-		int limitParam;
-		if (ctx.queryParam("limit") != null) {
-			limitParam = Integer.parseInt(ctx.queryParam("limit"));
-		} else {
-			limitParam = 50;
-		}
 		try {
+			int limitParam;
+			if (ctx.queryParam("limit") != null) {
+				limitParam = Integer.parseInt(ctx.queryParam("limit"));
+			} else {
+				limitParam = 50;
+			}
 			ctx.json(personDao.getAllPeople(limitParam));
 		} catch (SQLException e) {
 			ctx.status(500);
@@ -35,8 +35,8 @@ public class PersonController {
 
 	// M.4 Retrieve a person via their ID
 	public void getPersonById(Context ctx) {
-		int id = Integer.parseInt(ctx.pathParam("id"));
 		try {
+			int id = Integer.parseInt(ctx.pathParam("id"));
 			Person person = personDao.getPersonById(id);
 			if (person == null) {
 				ctx.status(404);
@@ -47,6 +47,9 @@ public class PersonController {
 		} catch (SQLException e) {
 			ctx.status(500);
 			ctx.result("Database error");
+		} catch (NumberFormatException e) {
+			ctx.status(500);
+			ctx.result("Invalid ID, no person found");
 		}
 	}
 
@@ -58,6 +61,9 @@ public class PersonController {
 		} catch (SQLException e) {
 			ctx.status(500);
 			ctx.result("Database error");
-		} 
+		} catch (NumberFormatException e) {
+			ctx.status(500);
+			ctx.result("Invalid ID, no movies found");
+		}
 	}
 }

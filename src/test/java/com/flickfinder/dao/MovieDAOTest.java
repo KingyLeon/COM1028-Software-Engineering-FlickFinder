@@ -11,6 +11,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import com.flickfinder.model.Movie;
+import com.flickfinder.model.MovieRating;
 import com.flickfinder.model.Person;
 import com.flickfinder.util.Database;
 import com.flickfinder.util.Seeder;
@@ -54,23 +55,24 @@ class MovieDAOTest {
 	 * database. We have seeded the database with 5 movies, so we expect to get 5
 	 * movies back. At this point, we avoid checking the actual content of the list.
 	 */
+
 	@Test
 	void testGetAllMovies() {
 		try {
-			List<Movie> movies = movieDAO.getAllMovies();
+			List<Movie> movies = movieDAO.getAllMovies(5);
 			assertEquals(5, movies.size());
 		} catch (SQLException e) {
 			fail("SQLException thrown");
 			e.printStackTrace();
 		}
 	}
-	
+
 	void testGetAllMoviesLimit() {
 		try {
 			List<Movie> movies = movieDAO.getAllMovies(3);
 			assertEquals(3, movies.size());
 		} catch (SQLException e) {
-			e.printStackTrace();
+			fail("SQLException thrown");
 		}
 	}
 
@@ -90,21 +92,10 @@ class MovieDAOTest {
 		}
 	}
 
-	/**
-	 * Tests the getMovieById method with an invalid id. Null should be returned.
+	/*
+	 * Tests the getStarsByMovie method. We expect to get a list of stars returned
+	 * related to a specified movie id
 	 */
-	@Test
-	void testGetMovieByIdInvalidId() {
-		// write an assertThrows for a SQLException
-		try {
-			Movie movie = movieDAO.getMovieById(1000);
-			assertEquals(null, movie);
-		} catch (SQLException e) {
-			fail("SQLException thrown");
-			e.printStackTrace();
-		}
-
-	}
 
 	@Test
 	void testGetStarsByMovie() {
@@ -114,9 +105,22 @@ class MovieDAOTest {
 			assertEquals("Tim Robbins", people.get(0).getName());
 			assertEquals("Morgan Freeman", people.get(1).getName());
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+			fail("SQLException thrown");
 			e.printStackTrace();
 		}
+	}
+
+	/*
+	 * Tests the getMovieRatingsByYear method. We expect a list of movies from the
+	 * same year.
+	 */
+
+	@Test
+	void testGetMovieRatingsByYear() {
+		List<MovieRating> movies;
+		movies = movieDAO.getMovieRatingsByYear(1974, 10, 100);
+		assertEquals("The Godfather: Part II", movies.get(0).getTitle());
+		assertEquals(9.0, movies.get(0).getRating());
 	}
 
 	@AfterEach

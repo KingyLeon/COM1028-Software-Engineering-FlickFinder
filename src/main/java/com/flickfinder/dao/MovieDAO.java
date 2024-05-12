@@ -1,4 +1,4 @@
- package com.flickfinder.dao;
+package com.flickfinder.dao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -43,17 +43,6 @@ public class MovieDAO {
 
 	// M.1 List All Movies from a database
 	// C.1 Get Limited Number of Movies
-	public List<Movie> getAllMovies() throws SQLException {
-		List<Movie> movies = new ArrayList<>();
-		PreparedStatement statement = connection.prepareStatement("SELECT * FROM movies LIMIT 50");
-
-		ResultSet rs = statement.executeQuery();
-		while (rs.next()) {
-			movies.add(new Movie(rs.getInt("id"), rs.getString("title"), rs.getInt("year")));
-		}
-
-		return movies;
-	}
 
 	public List<Movie> getAllMovies(int limit) throws SQLException {
 		List<Movie> movies = new ArrayList<>();
@@ -108,7 +97,6 @@ public class MovieDAO {
 			PersonDAO person = new PersonDAO();
 			people.add(person.getPersonById(x));
 		}
-		// return null if the id does not any stars.
 		return people;
 	}
 

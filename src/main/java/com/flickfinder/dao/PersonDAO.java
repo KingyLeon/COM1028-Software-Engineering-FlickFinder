@@ -24,40 +24,8 @@ public class PersonDAO {
 		Database database = Database.getInstance();
 		connection = database.getConnection();
 	}
-
-	// S.2: Retrieve a list of movies by a specific star.
-	public List<Movie> getMoviesByStar(int id) throws SQLException {
-		List<Integer> starsID = new ArrayList<Integer>();
-
-		String statement = "select * from stars where person_id = ?";
-		PreparedStatement ps = connection.prepareStatement(statement);
-		ps.setInt(1, id);
-		ResultSet rs = ps.executeQuery();
-
-		while (rs.next()) {
-			starsID.add(rs.getInt("movie_id"));
-		}
-
-		List<Movie> movies = new ArrayList<Movie>();
-		for (Integer x : starsID) {
-			MovieDAO movie = new MovieDAO();
-			movies.add(movie.getMovieById(x));
-		}
-		return movies;
-	}
-
-	// for the must have requirements, you will need to implement the following
-	// methods:
-	public List<Person> getAllPeople() throws SQLException {
-		List<Person> people = new ArrayList<>();
-		Statement statement = connection.createStatement();
-		ResultSet rs = statement.executeQuery("select * from People LIMIT 10");
-		while (rs.next()) {
-			people.add(new Person(rs.getInt("id"), rs.getString("name"), rs.getInt("birth")));
-		}
-
-		return people;
-	}
+	
+	// Retrieves a list of all (50) people, or a limited number of people
 
 	public List<Person> getAllPeople(int limit) throws SQLException {
 		List<Person> people = new ArrayList<>();
@@ -79,8 +47,26 @@ public class PersonDAO {
 		ResultSet rs = ps.executeQuery();
 		return new Person(rs.getInt("id"), rs.getString("name"), rs.getInt("birth"));
 	}
-	// you will add further methods for the more advanced tasks; however, ensure
-	// your have completed
-	// the must have requirements before you start these.
+
+	// S.2: Retrieve a list of movies by a specific star.
+	public List<Movie> getMoviesByStar(int id) throws SQLException {
+		List<Integer> starsID = new ArrayList<Integer>();
+
+		String statement = "select * from stars where person_id = ?";
+		PreparedStatement ps = connection.prepareStatement(statement);
+		ps.setInt(1, id);
+		ResultSet rs = ps.executeQuery();
+
+		while (rs.next()) {
+			starsID.add(rs.getInt("movie_id"));
+		}
+
+		List<Movie> movies = new ArrayList<Movie>();
+		for (Integer x : starsID) {
+			MovieDAO movie = new MovieDAO();
+			movies.add(movie.getMovieById(x));
+		}
+		return movies;
+	}
 
 }

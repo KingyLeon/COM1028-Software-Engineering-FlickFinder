@@ -69,9 +69,10 @@ public class MovieController {
 	 * 
 	 * @param ctx the Javalin context
 	 */
+
 	public void getMovieById(Context ctx) {
-		int id = Integer.parseInt(ctx.pathParam("id"));
 		try {
+			int id = Integer.parseInt(ctx.pathParam("id"));
 			Movie movie = movieDAO.getMovieById(id);
 			if (movie == null) {
 				ctx.status(404);
@@ -82,21 +83,26 @@ public class MovieController {
 		} catch (SQLException e) {
 			ctx.status(500);
 			ctx.result("Database error");
-		}
+		} catch (NumberFormatException e) {
+			ctx.status(500);
+			ctx.result("Invalid ID, no movie found");		}
 	}
+
 
 	/*
 	 * Returns people by specified movie id
 	 */
 	public void getPeopleByMovieId(Context ctx) {
-		int id = Integer.parseInt(ctx.pathParam("id"));
 		try {
+			int id = Integer.parseInt(ctx.pathParam("id"));
 			ctx.json(movieDAO.getStarsByMovie(id));
 		} catch (SQLException e) {
 			ctx.status(500);
 			ctx.result("Database error");
-			e.printStackTrace();
 		}
+		catch (NumberFormatException e) {
+			ctx.status(500);
+			ctx.result("Invalid ID, no movie found");		}
 	}
 
 	public void getRatingsByYear(Context ctx) throws SQLException {

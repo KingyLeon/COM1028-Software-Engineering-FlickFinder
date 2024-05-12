@@ -56,7 +56,7 @@ class PersonDAOTest {
 	@Test
 	void testGetAllPeople() {
 		try {
-			List<Person> person = personDAO.getAllPeople();
+			List<Person> person = personDAO.getAllPeople(5);
 			assertEquals(5, person.size());
 		} catch (SQLException e) {
 			fail("SQLException thrown");
@@ -70,6 +70,7 @@ class PersonDAOTest {
 			List<Person> people = personDAO.getAllPeople(2);
 			assertEquals(2, people.size());
 		} catch(SQLException e) {
+			fail("SQLException thrown");
 			e.printStackTrace();
 		}
 	}
@@ -115,7 +116,7 @@ class PersonDAOTest {
 			movies = personDAO.getMoviesByStar(4);
 			assertEquals("[Movie [id=2, title=The Godfather, year=1972], Movie [id=3, title=The Godfather: Part II, year=1974]]", movies.toString());
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+			fail("SQLException thrown");
 			e.printStackTrace();
 		}
 	}

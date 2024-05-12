@@ -67,6 +67,7 @@ class MovieControllerTest {
 	 * 
 	 * @throws SQLException
 	 */
+
 	@Test
 	void testThrows500ExceptionWhenGetAllDatabaseError() throws SQLException {
 		when(movieDAO.getAllMovies(50)).thenThrow(new SQLException());
@@ -106,9 +107,11 @@ class MovieControllerTest {
 			e.printStackTrace();
 		}
 	}
+
+
 	/*
-	 * Tests the getRatingsByYear method. 
-	 * We expect an ordered list returned of movies from a certain year above a certain number of votes
+	 * Tests the getRatingsByYear method. We expect an ordered list returned of
+	 * movies from a certain year above a certain number of votes
 	 */
 	@Test
 	void testGetRatingsByYear() {
@@ -122,9 +125,10 @@ class MovieControllerTest {
 			e.printStackTrace();
 		}
 	}
-	
+
 	// Tests default vote and limit value
-	// We expect an ordered list returned of 50 movies from a certain year above a 1000 votes
+	// We expect an ordered list returned of 50 movies from a certain year above a
+	// 1000 votes
 
 	@Test
 	void testNoVoteNoLimitParamGetRatingsByYear() {
@@ -149,6 +153,19 @@ class MovieControllerTest {
 		movieController.getMovieById(ctx);
 		verify(ctx).status(500);
 	}
+	
+	/**
+	 * Tests that the controller returns status 500 if no valid star found
+	 * @throws SQLException
+	 */
+	
+	@Test
+	void testThrows500WhenGetPeopleByMovieIdError() throws SQLException {
+		when(movieDAO.getStarsByMovie(1)).thenThrow(new SQLException());
+		movieController.getPeopleByMovieId(ctx);
+		verify(ctx).status(500);
+	}
+
 
 	/**
 	 * Test that the controller returns a 404 status code when a movie is not found
